@@ -1,0 +1,29 @@
+name: "Espressif IoT Development Framework (ESP-IDF) on push"
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: esp-idf build
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v5.1
+          target: esp32
+          path: 'examples/get-started/hello_world'
+
+      - name: Upload built firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: hello_world.bin
+          path: |
+            examples/get-started/hello_world/build/hello_world.bin
