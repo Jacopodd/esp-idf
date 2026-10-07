@@ -1,11 +1,11 @@
-name: "Espressif IoT Development Framework (ESP-IDF) on push"
+name: "ESP-IDF build examples"
 
 on:
   push:
     branches: [master]
 
 jobs:
-  build:
+  build-hello-world:
     runs-on: ubuntu-latest
 
     steps:
@@ -14,16 +14,37 @@ jobs:
         with:
           submodules: 'recursive'
 
-      - name: esp-idf build
+      - name: Build hello_world
         uses: espressif/esp-idf-ci-action@v1
         with:
           esp_idf_version: v5.1
           target: esp32
           path: 'examples/get-started/hello_world'
 
-      - name: Upload built firmware
+      - name: Upload hello_world firmware
         uses: actions/upload-artifact@v4
         with:
-          name: hello_world.bin
-          path: |
-            examples/get-started/hello_world/build/hello_world.bin
+          name: hello_world-bin
+          path: examples/get-started/hello_world/build/hello_world.bin
+
+  build-blink:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Build blink
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v5.1
+          target: esp32
+          path: 'examples/get-started/blink'
+
+      - name: Upload blink firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: blink-bin
+          path: examples/get-started/blink/build/blink.bin
